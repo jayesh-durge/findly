@@ -17,7 +17,7 @@ class QRGenerateResponse(BaseModel):
 async def generate_qr(request: QRGenerateRequest):
     # In a real app, you might want FRONTEND_URL from env, 
     # but for scanning we can construct the url the finder will open:
-    base_url = os.environ.get("VITE_FRONTEND_URL", "http://10.254.180.26:5173")
+    base_url = os.environ.get("VITE_FRONTEND_URL", "http://localhost:5173")
     scan_url = f"{base_url}/scan/{request.qr_id}"
     
     # Generate the base64 image

@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 import os
 from dotenv import load_dotenv
+import uvicorn
 
 load_dotenv()
 
@@ -30,3 +31,7 @@ app.include_router(items.router)
 app.include_router(qr.router)
 app.include_router(messages.router)
 app.include_router(rewards.router)
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=int(os.getenv("PORT", "8000")), reload=True)

@@ -54,13 +54,34 @@ async def get_user_messages(user_id: str):
         raise HTTPException(status_code=500, detail="Supabase client not initialized")
         
     try:
-        # Join with items to get item name
         response = supabase.table("messages") \
-            .select("*, items(item_name, is_lost)") \
+            .select("*") \
             .eq("receiver_id", user_id) \
             .order("created_at", desc=True) \
             .execute()
-        return response.data
+
+        messages = response.data or []
+        item_ids = sorted({msg.get("item_id") for msg in messages if msg.get("item_id")})
+        items_by_qr_id = {}
+
+        if item_ids:
+            items_response = supabase.table("items") \
+                .select("qr_id,item_name,is_lost") \
+                .in_("qr_id", item_ids) \
+                .execute()
+
+            items_by_qr_id = {
+                item["qr_id"]: {"item_name": item["item_name"], "is_lost": item.get("is_lost", False)}
+                for item in (items_response.data or [])
+            }
+
+        enriched_messages = []
+        for msg in messages:
+            enriched_msg = dict(msg)
+            enriched_msg["items"] = items_by_qr_id.get(msg.get("item_id"))
+            enriched_messages.append(enriched_msg)
+
+        return enriched_messages
     except Exception as e:
         print(f"Error fetching messages: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
