@@ -21,7 +21,6 @@ import {
   Logout as LogoutIcon,
   Person as PersonIcon,
   Apps as AppsIcon,
-  EmojiEvents as TrophyIcon,
   Coffee as CoffeeIcon,
 } from '@mui/icons-material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';

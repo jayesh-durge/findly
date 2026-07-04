@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
       <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <Box>
           <Typography variant="h3" sx={{ fontWeight: 900, mb: 1, letterSpacing: '-0.03em' }}>
-            Hello, {user?.user_metadata?.full_name?.split(' ')[0] || 'User'}!
+            Hello, {user?.full_name?.split(' ')[0] || user?.user_metadata?.full_name?.split(' ')[0] || 'User'}!
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400 }}>
             Here is a snapshot of your protected items.

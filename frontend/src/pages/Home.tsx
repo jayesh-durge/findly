@@ -7,7 +7,6 @@ import {
   Grid, 
   Paper, 
   Avatar,
-  Stack,
   alpha,
   useTheme
 } from '@mui/material';

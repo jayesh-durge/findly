@@ -4,7 +4,6 @@ import {
   Typography, 
   Button, 
   Paper,
-  IconButton
 } from '@mui/material';
 import { 
   Download as DownloadIcon, 

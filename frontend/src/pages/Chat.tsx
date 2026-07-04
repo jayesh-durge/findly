@@ -16,7 +16,6 @@ import {
   ArrowBack as BackIcon,
   QrCode as QrCodeIcon,
   Coffee as CoffeeIcon,
-  EmojiEvents as TrophyIcon,
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';

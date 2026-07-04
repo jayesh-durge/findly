@@ -41,7 +41,7 @@ const ScanItem: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      setSenderName(user.user_metadata?.full_name || '');
+      setSenderName(user.full_name || user.user_metadata?.full_name || '');
       setSenderEmail(user.email || '');
     }
   }, [user]);

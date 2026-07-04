@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
   Chip,
   CircularProgress,
   Avatar,
@@ -95,8 +94,8 @@ const Rewards: React.FC = () => {
           pointerEvents: 'none',
         }} />
 
-        <Grid container spacing={4} alignItems="center">
-          <Grid size={{ xs: 12, sm: 7 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4, alignItems: 'center' }}>
+          <Box sx={{ flex: '1 1 320px', minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
               <Box sx={{
                 p: 1.5, borderRadius: 3,
@@ -131,9 +130,10 @@ const Rewards: React.FC = () => {
                 fontWeight: 700, fontSize: '0.85rem',
               }}
             />
-          </Grid>
 
-          <Grid size={{ xs: 12, sm: 5 }}>
+          </Box>
+
+          <Box sx={{ flex: '1 1 280px', minWidth: 0 }}>
             <Box sx={{ display: 'flex', gap: 3 }}>
               <Box sx={{
                 flex: 1, p: 2, borderRadius: 3,
@@ -154,8 +154,8 @@ const Rewards: React.FC = () => {
                 <Typography sx={{ fontSize: '0.72rem', color: '#8b949e', fontWeight: 600 }}>SENT</Typography>
               </Box>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
 
       {/* How it works */}
