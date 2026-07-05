@@ -91,24 +91,26 @@ const Home: React.FC = () => {
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button 
-              component={Link} 
-              to="/dashboard" 
-              variant="contained" 
+            <Button
+              component={Link}
+              to="/dashboard"
+              variant="contained"
               size="large"
-              sx={{ px: 4, py: 1.8, fontSize: '1.1rem' }}
+              fullWidth={false}
+              sx={{ px: { xs: 3, sm: 4 }, py: 1.8, fontSize: { xs: '1rem', sm: '1.1rem' }, width: { xs: '100%', sm: 'auto' } }}
             >
               Get Started Now
             </Button>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               size="large"
-              sx={{ 
-                px: 4, 
-                py: 1.8, 
-                fontSize: '1.1rem',
+              sx={{
+                px: { xs: 3, sm: 4 },
+                py: 1.8,
+                fontSize: { xs: '1rem', sm: '1.1rem' },
                 borderColor: 'rgba(255,255,255,0.1)',
                 color: 'text.primary',
+                width: { xs: '100%', sm: 'auto' },
                 '&:hover': { borderColor: 'rgba(255,255,255,0.3)', bgcolor: 'rgba(255,255,255,0.02)' }
               }}
             >
@@ -157,17 +159,17 @@ const Home: React.FC = () => {
         </Grid>
 
         {/* Call to Action Bar */}
-        <Paper sx={{ 
-          mt: 12, 
-          p: 6, 
-          borderRadius: 6, 
-          background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`, 
+        <Paper sx={{
+          mt: { xs: 6, md: 12 },
+          p: { xs: 4, md: 6 },
+          borderRadius: 6,
+          background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
           border: '1px solid rgba(255,255,255,0.05)',
           overflow: 'hidden',
           position: 'relative'
         }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 800 }}>Ready to secure your world?</Typography>
+            <Typography variant="h4" sx={{ mb: 1, fontWeight: 800, fontSize: { xs: '1.4rem', sm: '2rem' } }}>Ready to secure your world?</Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>Join 10,000+ users protecting their valuables today.</Typography>
             <Button component={Link} to="/signup" variant="contained" size="large">Create Free Account</Button>
           </Box>

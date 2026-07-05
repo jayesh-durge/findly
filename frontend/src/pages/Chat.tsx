@@ -216,6 +216,7 @@ const Chat: React.FC = () => {
             border: '1px solid rgba(63,128,255,0.2)',
             fontFamily: 'monospace',
             fontSize: '0.7rem',
+            display: { xs: 'none', sm: 'inline-flex' },
           }}
         />
 

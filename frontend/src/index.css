@@ -163,3 +163,41 @@ a {
   flex-direction: column;
   min-height: 100vh;
 }
+
+/* Mobile-specific improvements */
+@media (max-width: 600px) {
+  /* Ensure minimum 44px tap targets (Apple HIG guideline) */
+  button, a, [role="button"], .MuiIconButton-root {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent font size inflation on iOS orientation change */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Prevent horizontal overflow on all pages */
+  .MuiContainer-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Smooth momentum scrolling on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area insets for notched phones (iPhone X+) */
+@supports (padding: max(0px)) {
+  .MuiAppBar-root {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  #root {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+

@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import { 
   Message as MessageIcon, 
-  Inventory as InventoryIcon, 
   CalendarMonth as DateIcon,
   Person as PersonIcon,
   DeleteSweep as SpamIcon,
@@ -128,46 +127,46 @@ const Messages: React.FC = () => {
         <List sx={{ p: 0 }}>
           {msgList.map((msg, index) => (
             <React.Fragment key={msg.id}>
-              <ListItem 
-                alignItems="flex-start" 
+              <ListItem
+                alignItems="flex-start"
                 onClick={() => handleMessageClick(msg)}
-                sx={{ 
-                  p: 3, 
+                sx={{
+                  p: { xs: 2, sm: 3 },
                   cursor: 'pointer',
                   '&:hover': { bgcolor: 'rgba(0,0,0,0.015)' },
                   transition: 'background 0.2s',
                   position: 'relative'
                 }}
               >
-                {!msg.sender_id && (
-                  <LockIcon sx={{ position: 'absolute', top: 12, right: 12, fontSize: 16, color: 'text.disabled' }} />
-                )}
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: tabValue === 0 ? 'primary.main' : 'text.disabled' }}>
-                    <PersonIcon />
+                  <Avatar sx={{ bgcolor: tabValue === 0 ? 'primary.main' : 'text.disabled', width: 36, height: 36 }}>
+                    <PersonIcon sx={{ fontSize: 18 }} />
                   </Avatar>
                 </ListItemAvatar>
                 <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.5, gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, minWidth: 0, flexWrap: 'wrap' }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: { xs: '0.9rem', sm: '1rem' } }} noWrap>
                         {msg.sender_name}
                       </Typography>
                       {msg.sender_id && (
-                        <Chip label="Verified User" size="small" color="success" variant="filled" sx={{ height: 20, fontSize: '10px' }} />
+                        <Chip label="Verified" size="small" color="success" variant="filled" sx={{ height: 18, fontSize: '10px' }} />
+                      )}
+                      {!msg.sender_id && (
+                        <LockIcon sx={{ fontSize: 14, color: 'text.disabled' }} />
                       )}
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip 
-                        icon={<InventoryIcon sx={{ fontSize: '14px !important' }} />} 
-                        label={msg.items?.item_name || 'Deleted Item'} 
-                        size="small" 
-                        variant="outlined" 
-                        color={tabValue === 0 ? "primary" : "default"}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexShrink: 0 }}>
+                      <Chip
+                        label={msg.items?.item_name || 'Item'}
+                        size="small"
+                        variant="outlined"
+                        color={tabValue === 0 ? 'primary' : 'default'}
+                        sx={{ maxWidth: { xs: 80, sm: 140 }, fontSize: '0.7rem' }}
                       />
                       <Tooltip title="Delete Chat">
                         <IconButton size="small" color="error" onClick={(e) => handleDeleteChat(e, msg)}>
-                          <DeleteIcon fontSize="small" />
+                          <DeleteIcon sx={{ fontSize: 16 }} />
                         </IconButton>
                       </Tooltip>
                     </Box>
@@ -203,31 +202,31 @@ const Messages: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h3" sx={{ fontWeight: 800 }} color="primary" gutterBottom>
+    <Container maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h3" sx={{ fontWeight: 800, fontSize: { xs: '1.8rem', md: '2.5rem' } }} color="primary" gutterBottom>
           Inbox
         </Typography>
-        <Typography variant="h6" color="text.secondary">
+        <Typography variant="body1" color="text.secondary">
           Manage your communications with finders.
         </Typography>
       </Box>
 
-      {error && <Alert severity="error" sx={{ mb: 4 }}>{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 4 }}>
-        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} aria-label="message tabs">
-          <Tab 
-            icon={<ValidIcon />} 
-            iconPosition="start" 
-            label={`Active Chats (${activeMessages.length})`} 
-            sx={{ fontWeight: 700 }}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} aria-label="message tabs" variant="fullWidth">
+          <Tab
+            icon={<ValidIcon />}
+            iconPosition="start"
+            label={`Active (${activeMessages.length})`}
+            sx={{ fontWeight: 700, fontSize: { xs: '0.75rem', sm: '0.875rem' }, minHeight: 48 }}
           />
-          <Tab 
-            icon={<SpamIcon />} 
-            iconPosition="start" 
-            label={`Spam / Safe Items (${spamMessages.length})`} 
-            sx={{ fontWeight: 700 }}
+          <Tab
+            icon={<SpamIcon />}
+            iconPosition="start"
+            label={`Safe Items (${spamMessages.length})`}
+            sx={{ fontWeight: 700, fontSize: { xs: '0.75rem', sm: '0.875rem' }, minHeight: 48 }}
           />
         </Tabs>
       </Box>

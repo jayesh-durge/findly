@@ -121,23 +121,23 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 3, md: 6 } }}>
       {/* Header Section */}
-      <Box sx={{ mb: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <Box sx={{ mb: 4, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'flex-end' }, gap: 2 }}>
         <Box>
-          <Typography variant="h3" sx={{ fontWeight: 900, mb: 1, letterSpacing: '-0.03em' }}>
+          <Typography variant="h3" sx={{ fontWeight: 900, mb: 1, letterSpacing: '-0.03em', fontSize: { xs: '1.8rem', md: '2.8rem' } }}>
             Hello, {user?.full_name?.split(' ')[0] || user?.user_metadata?.full_name?.split(' ')[0] || 'User'}!
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400 }}>
+          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 400, fontSize: { xs: '0.95rem', md: '1.25rem' } }}>
             Here is a snapshot of your protected items.
           </Typography>
         </Box>
-        <Button 
-          component={Link} 
-          to="/create-item" 
-          variant="contained" 
+        <Button
+          component={Link}
+          to="/create-item"
+          variant="contained"
           startIcon={<AddIcon />}
-          sx={{ height: 48, px: 3 }}
+          sx={{ height: 48, px: 3, whiteSpace: 'nowrap', flexShrink: 0 }}
         >
           Register New Tag
         </Button>
