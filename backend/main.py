@@ -40,4 +40,7 @@ app.include_router(rewards.router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=int(os.getenv("PORT", "8000")), reload=True)
+    # Disable reload in production to avoid process management and port binding issues
+    dev_mode = os.getenv("ENVIRONMENT", "production").lower() == "development"
+    uvicorn.run("main:app", host="0.0.0.0", port=int(os.getenv("PORT", "8000")), reload=dev_mode)
+

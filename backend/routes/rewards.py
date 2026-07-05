@@ -25,35 +25,43 @@ async def send_coins(req: SendCoinsRequest):
     if req.sender_id == req.receiver_id:
         raise HTTPException(status_code=400, detail="Cannot send coins to yourself")
 
-    # Get sender balance
-    sender_res = supabase.table("users").select("coins").eq("id", req.sender_id).single().execute()
-    if not sender_res.data:
-        raise HTTPException(status_code=404, detail="Sender not found")
+    try:
+        # Get sender balance without using unsafe .single()
+        sender_res = supabase.table("users").select("coins").eq("id", req.sender_id).execute()
+        if not sender_res.data or len(sender_res.data) == 0:
+            raise HTTPException(status_code=404, detail="Sender not found")
 
-    sender_coins = sender_res.data.get("coins", 0) or 0
-    if sender_coins < req.amount:
-        raise HTTPException(status_code=400, detail=f"Not enough coins. You have {sender_coins} coins.")
+        sender_coins = sender_res.data[0].get("coins", 0) or 0
+        if sender_coins < req.amount:
+            raise HTTPException(status_code=400, detail=f"Not enough coins. You have {sender_coins} coins.")
 
-    # Deduct from sender
-    supabase.table("users").update({"coins": sender_coins - req.amount}).eq("id", req.sender_id).execute()
+        # Deduct from sender
+        supabase.table("users").update({"coins": sender_coins - req.amount}).eq("id", req.sender_id).execute()
 
-    # Add to receiver
-    recv_res = supabase.table("users").select("coins").eq("id", req.receiver_id).single().execute()
-    if not recv_res.data:
-        raise HTTPException(status_code=404, detail="Receiver not found")
+        # Add to receiver
+        recv_res = supabase.table("users").select("coins").eq("id", req.receiver_id).execute()
+        if not recv_res.data or len(recv_res.data) == 0:
+            # Rollback coins to sender if receiver doesn't exist
+            supabase.table("users").update({"coins": sender_coins}).eq("id", req.sender_id).execute()
+            raise HTTPException(status_code=404, detail="Receiver not found")
 
-    receiver_coins = recv_res.data.get("coins", 0) or 0
-    supabase.table("users").update({"coins": receiver_coins + req.amount}).eq("id", req.receiver_id).execute()
+        receiver_coins = recv_res.data[0].get("coins", 0) or 0
+        supabase.table("users").update({"coins": receiver_coins + req.amount}).eq("id", req.receiver_id).execute()
 
-    # Log transaction
-    supabase.table("coin_transactions").insert({
-        "sender_id": req.sender_id,
-        "receiver_id": req.receiver_id,
-        "amount": req.amount,
-        "message": req.message,
-    }).execute()
+        # Log transaction
+        supabase.table("coin_transactions").insert({
+            "sender_id": req.sender_id,
+            "receiver_id": req.receiver_id,
+            "amount": req.amount,
+            "message": req.message,
+        }).execute()
 
-    return {"success": True, "new_balance": sender_coins - req.amount}
+        return {"success": True, "new_balance": sender_coins - req.amount}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in send_coins transaction: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database transaction error: {str(e)}")
 
 
 @router.get("/rewards/balance/{user_id}")
@@ -63,11 +71,17 @@ async def get_balance(user_id: str):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not initialized")
 
-    res = supabase.table("users").select("coins, full_name, email").eq("id", user_id).single().execute()
-    if not res.data:
-        raise HTTPException(status_code=404, detail="User not found")
+    try:
+        res = supabase.table("users").select("coins, full_name, email").eq("id", user_id).execute()
+        if not res.data or len(res.data) == 0:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    return {"coins": res.data.get("coins", 0) or 0, "user": res.data}
+        return {"coins": res.data[0].get("coins", 0) or 0, "user": res.data[0]}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error fetching balance for {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 
 @router.get("/rewards/transactions/{user_id}")
@@ -77,11 +91,16 @@ async def get_transactions(user_id: str):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase not initialized")
 
-    res = supabase.table("coin_transactions") \
-        .select("*, sender:sender_id(full_name, email), receiver:receiver_id(full_name, email)") \
-        .or_(f"sender_id.eq.{user_id},receiver_id.eq.{user_id}") \
-        .order("created_at", desc=True) \
-        .limit(50) \
-        .execute()
+    try:
+        res = supabase.table("coin_transactions") \
+            .select("*, sender:sender_id(full_name, email), receiver:receiver_id(full_name, email)") \
+            .or_(f"sender_id.eq.{user_id},receiver_id.eq.{user_id}") \
+            .order("created_at", desc=True) \
+            .limit(50) \
+            .execute()
 
-    return res.data or []
+        return res.data or []
+    except Exception as e:
+        print(f"Error fetching transactions for {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
