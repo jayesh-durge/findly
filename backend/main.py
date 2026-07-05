@@ -1,9 +1,15 @@
+import sys
+import os
+
+# Add current directory to python path for robust importing when run from different directories
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
-import os
 from dotenv import load_dotenv
 import uvicorn
+
 
 load_dotenv()
 
