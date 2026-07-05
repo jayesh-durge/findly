@@ -24,9 +24,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-url: str = os.environ.get("SUPABASE_URL", "")
-key: str = os.environ.get("SUPABASE_KEY", "")
+url: str = os.environ.get("SUPABASE_URL") or os.environ.get("VITE_SUPABASE_URL", "")
+key: str = os.environ.get("SUPABASE_KEY") or os.environ.get("VITE_SUPABASE_ANON_KEY", "")
 supabase: Client = create_client(url, key) if url and key else None
+
 
 @app.get("/")
 def read_root():
