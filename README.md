@@ -1,6 +1,8 @@
-﻿# 🔍 Findly — Smart QR Lost & Found
+# 🔍 Findly — Smart QR Lost & Found
 
 > A modern lost-and-found platform that lets you tag your belongings with QR codes. When someone finds your item, they scan the QR code and can instantly contact you — no app download required.
+
+**🔗 Hosted Live Site:** [https://findly-pi.vercel.app/](https://findly-pi.vercel.app/)
 
 ---
 
